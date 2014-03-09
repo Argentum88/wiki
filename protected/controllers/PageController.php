@@ -103,7 +103,7 @@ class PageController extends Controller
 		$this->loadModel($id)->delete();
 
 		// if AJAX request (triggered by deletion via admin grid view), we should not redirect the browser
-		//TODO реализовать редирект на родительскую страницу удаленной страницы, а так же удалить дочерние страницы удаленной страницы
+		//TODO реализовать редирект на родительскую страницу удаленной страницы
         if(!isset($_GET['ajax']))
 			$this->redirect(isset($_POST['returnUrl']) ? $_POST['returnUrl'] : array('view','id'=>1));
 	}

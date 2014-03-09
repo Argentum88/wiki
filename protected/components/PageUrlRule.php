@@ -1,4 +1,5 @@
 <?php
+//TODO удалить дублирование в кейсах
 class PageUrlRule extends CBaseUrlRule
 {
     public function createUrl($manager, $route, $params, $ampersand)
