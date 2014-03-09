@@ -48,6 +48,7 @@ class PageController extends Controller
 	/**
 	 * Creates a new model.
 	 * If creation is successful, the browser will be redirected to the 'view' page.
+     * @var $model Page
 	 */
 	public function actionCreate()
 	{
@@ -55,21 +56,10 @@ class PageController extends Controller
 
 		// Uncomment the following line if AJAX validation is needed
 		// $this->performAjaxValidation($model);
-
 		if(isset($_POST['Page']))
 		{
 			$model->attributes=$_POST['Page'];
-
-            //TODO Выделить часть кода в метод модели
-            $path = Yii::app()->request->getPathInfo();
-            $chainPages = explode('/', $path);
-            array_pop($chainPages);
-			$parentPage = array_pop($chainPages);
-            $modelParentPage = Page::model()->find('url=:url', array(':url'=>$parentPage));
-            $modelParentPage->children .= ",$model->url";
-            $modelParentPage->save();
-            $model->parent = $modelParentPage->id;
-
+            $model->installationOfFamilyRelationsToNewlyCreatedPage();
             if($model->save())
 				$this->redirect(array('view','id'=>$model->id));
 		}

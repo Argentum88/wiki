@@ -97,4 +97,21 @@ class Page extends CActiveRecord
 			'criteria'=>$criteria,
 		));
 	}
+
+    public function installationOfFamilyRelationsToNewlyCreatedPage()
+    {
+        $path = Yii::app()->request->getPathInfo();
+        $chainPages = explode('/', $path);
+        array_pop($chainPages);
+        $parentPage = array_pop($chainPages);
+        $modelParentPage = self::model()->find('url=:url', array(':url'=>$parentPage));
+
+        if($modelParentPage->children == null)
+            $modelParentPage->children = $this->url;
+        else
+            $modelParentPage->children .= ",$this->url";
+
+        $modelParentPage->save();
+        $this->parent = $modelParentPage->id;
+    }
 }
