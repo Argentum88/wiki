@@ -115,31 +115,39 @@ class Page extends CActiveRecord
         $this->parent = $modelParentPage->id;
     }
 
-    //TODO Выделить 2 метода
     protected function beforeDelete()
     {
-        $parentPage = self::model()->find('id=:ID', array(':ID'=>$this->parent));
+        $this->deleteFromListOfChildrenDeletedPage();
+        $this->deleteChildrenOfDeletedPage();
+
+        parent::beforeDelete();
+        return true;
+    }
+
+    private function deleteFromListOfChildrenDeletedPage()
+    {
+        $parentPage = self::model()->find('id=:ID', array(':ID' => $this->parent));
         $children = explode(',', $parentPage->children);
         $IdOfRemotePage = array_search($this->url, $children);
         if ($IdOfRemotePage !== false)
             unset($children[$IdOfRemotePage]);
         $children = array_values($children);
         $children = implode(',', $children);
-        if($children != '')
+        if ($children != '')
             $parentPage->children = $children;
         else
             $parentPage->children = null;
         $parentPage->save();
+    }
 
-        if($this->children != null) {
+    private function deleteChildrenOfDeletedPage()
+    {
+        if ($this->children != null) {
             $children = explode(',', $this->children);
-            foreach($children as $pageUrl) {
-                $page = self::model()->find('url=:URL', array(':URL'=>$pageUrl));
+            foreach ($children as $pageUrl) {
+                $page = self::model()->find('url=:URL', array(':URL' => $pageUrl));
                 $page->delete();
             }
         }
-
-        parent::beforeDelete();
-        return true;
     }
 }
