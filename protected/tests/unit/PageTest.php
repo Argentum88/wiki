@@ -9,9 +9,6 @@ class PageTest extends CDbTestCase
         'pages'=>'Page'
     );
 
-    /**
-     * @var $dogPage Page
-     */
     public function testGenerateChildrenMenuItems()
     {
         $dogPage = $this->pages('s3');
@@ -26,5 +23,14 @@ class PageTest extends CDbTestCase
             array('label'=>'У данной страницы нет дочерних страниц')
         );
         $this->assertEquals($expectedArray, $rexPage->generateChildrenMenuItems());
+    }
+
+    public function testGetTitleParentPage()
+    {
+        $animalPage = $this->pages('s1');
+        $this->assertEquals('нет', $animalPage->getTitleParentPage());
+
+        $dogPage = $this->pages('s3');
+        $this->assertEquals('animal', $dogPage->getTitleParentPage());
     }
 }

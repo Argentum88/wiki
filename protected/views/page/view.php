@@ -11,7 +11,14 @@ $this->menu=array(
 $this->menu_child = $model->generateChildrenMenuItems();
 ?>
 
-<h1>View Page #<?php echo $model->id; ?></h1>
+<div>Родительская страница:
+    <?php
+        if($model->getTitleParentPage()=='нет')
+            echo 'нет';
+        else
+            echo CHtml::link($model->getTitleParentPage(), array('view', 'id'=>$model->parent));
+    ?>
+</div>
 
 <?php $this->widget('zii.widgets.CDetailView', array(
 	'data'=>$model,

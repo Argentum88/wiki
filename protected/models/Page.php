@@ -184,4 +184,11 @@ class Page extends CActiveRecord
         }
         return $result;
     }
+
+    public function getTitleParentPage()
+    {
+        if($this->parent!=null)
+            return self::model()->findByPk($this->parent)->title;
+        return 'нет';
+    }
 }
