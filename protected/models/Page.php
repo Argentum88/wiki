@@ -150,4 +150,31 @@ class Page extends CActiveRecord
             }
         }
     }
+
+    public function generateChildrenMenuItems()
+    {
+        $childrenID = $this->getChildrenIDs();
+        $menuItems = array();
+        $menuItem = array();
+
+        for ($i=0; $i < count($childrenID); $i++) {
+            $childPage = self::model()->findByPk($childrenID[$i]);
+            $menuItem['label'] = $childPage->title;
+            $menuItem['url'] = array('view', 'id'=>$childPage->id);
+            $menuItems[] = $menuItem;
+        }
+
+        return $menuItems;
+    }
+
+    private function getChildrenIDs()
+    {
+        $result= array();
+        $childrenUrl = explode(',', $this->children);
+        for($i=0; $i<count($childrenUrl); $i++) {
+            $child = self::model()->find('url=:URL', array(':URL'=>$childrenUrl[$i]));
+            $result[] = $child->id;
+        }
+        return $result;
+    }
 }
