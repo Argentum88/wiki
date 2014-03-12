@@ -156,11 +156,15 @@ class Page extends CActiveRecord
         $childrenID = $this->getChildrenIDs();
         $menuItems = array();
         $menuItem = array();
-
-        for ($i=0; $i < count($childrenID); $i++) {
-            $childPage = self::model()->findByPk($childrenID[$i]);
-            $menuItem['label'] = $childPage->title;
-            $menuItem['url'] = array('view', 'id'=>$childPage->id);
+        if(count($childrenID)!=0) {
+            for ($i=0; $i < count($childrenID); $i++) {
+                $childPage = self::model()->findByPk($childrenID[$i]);
+                $menuItem['label'] = $childPage->title;
+                $menuItem['url'] = array('view', 'id'=>$childPage->id);
+                $menuItems[] = $menuItem;
+            }
+        } else {
+            $menuItem['label'] = 'У данной страницы нет дочерних страниц';
             $menuItems[] = $menuItem;
         }
 
@@ -170,10 +174,13 @@ class Page extends CActiveRecord
     private function getChildrenIDs()
     {
         $result= array();
-        $childrenUrl = explode(',', $this->children);
-        for($i=0; $i<count($childrenUrl); $i++) {
-            $child = self::model()->find('url=:URL', array(':URL'=>$childrenUrl[$i]));
-            $result[] = $child->id;
+        if($this->children != null) {
+            $childrenUrl = explode(',', $this->children);
+
+            for($i=0; $i<count($childrenUrl); $i++) {
+                $child = self::model()->find('url=:URL', array(':URL'=>$childrenUrl[$i]));
+                $result[] = $child->id;
+            }
         }
         return $result;
     }

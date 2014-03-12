@@ -18,5 +18,18 @@
 		$this->endWidget();
 	?>
 	</div><!-- sidebar -->
+
+    <div id="sidebar-child">
+        <?php
+        $this->beginWidget('zii.widgets.CPortlet', array(
+            'title'=>'child page(s)',
+        ));
+        $this->widget('zii.widgets.CMenu', array(
+            'items'=>$this->menu_child,
+            'htmlOptions'=>array('class'=>'link'),
+        ));
+        $this->endWidget();
+        ?>
+    </div>
 </div>
 <?php $this->endContent(); ?>

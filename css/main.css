@@ -27,7 +27,7 @@ body
     padding: 20px;
 }
 
-#sidebar
+#sidebar, #sidebar-child
 {
 	padding: 20px 20px 20px 0;
 }

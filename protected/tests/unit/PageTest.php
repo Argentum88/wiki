@@ -10,17 +10,21 @@ class PageTest extends CDbTestCase
     );
 
     /**
-     * @var $currentPage Page
+     * @var $dogPage Page
      */
     public function testGenerateChildrenMenuItems()
     {
-        $currentPage = $this->pages('s3');
-
+        $dogPage = $this->pages('s3');
         $expectedArray = array(
             array('label'=>'richi', 'url'=>array('view', 'id'=>4)),
             array('label'=>'rex', 'url'=>array('view', 'id'=>5))
         );
+        $this->assertEquals($expectedArray, $dogPage->generateChildrenMenuItems());
 
-        $this->assertEquals($expectedArray, $currentPage->generateChildrenMenuItems());
+        $rexPage = $this->pages('s5');
+        $expectedArray = array(
+            array('label'=>'У данной страницы нет дочерних страниц')
+        );
+        $this->assertEquals($expectedArray, $rexPage->generateChildrenMenuItems());
     }
 }

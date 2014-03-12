@@ -7,6 +7,8 @@ $this->menu=array(
 	array('label'=>'Update Page', 'url'=>array('update', 'id'=>$model->id)),
 	array('label'=>'Delete Page', 'url'=>'#', 'linkOptions'=>array('submit'=>array('delete','id'=>$model->id),'confirm'=>'Are you sure you want to delete this item?')),
 );
+
+$this->menu_child = $model->generateChildrenMenuItems();
 ?>
 
 <h1>View Page #<?php echo $model->id; ?></h1>
