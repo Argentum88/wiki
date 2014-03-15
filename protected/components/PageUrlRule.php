@@ -45,41 +45,53 @@ class PageUrlRule extends CBaseUrlRule
         switch ($action) {
             case 'add':
                 array_pop($chainPages);
-                if($this->checkCorrectnessOfPath($chainPages))
+                if(self::checkCorrectnessOfPath($chainPages))
                     return 'page/create';
                 else
                     throw new CHttpException(404,'No page');
             case 'edit':
                 array_pop($chainPages);
-                if($this->checkCorrectnessOfPath($chainPages))
+                if(self::checkCorrectnessOfPath($chainPages))
                     return 'page/update';
                 else
                     throw new CHttpException(404,'No page');
             case 'delete':
                 array_pop($chainPages);
-                if($this->checkCorrectnessOfPath($chainPages))
+                if(self::checkCorrectnessOfPath($chainPages))
                     return 'page/delete';
                 else
                     throw new CHttpException(404,'No page');
             default:
-                if($this->checkCorrectnessOfPath($chainPages))
+                if(self::checkCorrectnessOfPath($chainPages))
                     return 'page/view';
                 else
                     throw new CHttpException(404,'No page');
         }
     }
+
+    public static function urlForPageToBeCreated($chainPages)
+    {
+        while((!self::checkCorrectnessOfPath($chainPages))&&(count($chainPages)>=1)) {
+            array_pop($chainPages);
+        }
+        if(count($chainPages)==0) {
+            return '';
+        } else {
+            return implode('/', $chainPages).'/add';
+        }
+    }
     /*
      * @return boolean
      */
-    private function checkCorrectnessOfPath($chainPages)
+    public static function checkCorrectnessOfPath($chainPages)
     {
         if(count($chainPages) == 1){
-            if($this->checkPageInWiki($chainPages[0]))
+            if(self::checkPageInWiki($chainPages[0]))
                 return true;
             else
                 return false;
         } else {
-            if($this->checkPageBelongsToFamily($chainPages)) {
+            if(self::checkPageBelongsToFamily($chainPages)) {
                 $page = Page::model()->find('url=:url', array(':url'=>$chainPages[count($chainPages)-1]));
                 $_GET['id'] = $page->id;
                 return true;
@@ -88,7 +100,7 @@ class PageUrlRule extends CBaseUrlRule
         }
     }
 
-    private function checkPageInWiki($page)
+    private static function checkPageInWiki($page)
     {
         $page = Page::model()->find('url=:url', array(':url'=>$page));
         if($page instanceof Page) {
@@ -98,7 +110,7 @@ class PageUrlRule extends CBaseUrlRule
             return false;
     }
 
-    private function checkPageBelongsToFamily($chainPages)
+    private static function checkPageBelongsToFamily($chainPages)
     {
         do {
             $currentPage = Page::model()->find('url=:url', array(':url'=>$chainPages[count($chainPages)-1]));

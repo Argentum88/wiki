@@ -151,6 +151,27 @@ class Page extends CActiveRecord
         }
     }
 
+    protected function beforeSave()
+    {
+        $this->content = preg_replace('=\*\*(.*?)\*\*=', '<b>$1</b>', $this->content);
+        $this->content = preg_replace('=\/\/(.*?)\/\/=', '<i>$1</i>', $this->content);
+        $this->content = preg_replace('=__(.*?)__=', '<u>$1</u>', $this->content);
+
+        $matches = array();
+        $num = preg_match_all('=\[\[(.*?) (.*?)\]\]=', $this->content, $matches, PREG_SET_ORDER);
+
+        for ($i=0;$i<$num;$i++) {
+            $chainPages = explode('/', $matches[$i][1]);
+            if(PageUrlRule::checkCorrectnessOfPath($chainPages))
+                $this->content = preg_replace('=\[\[(.*?) (.*?)\]\]=', '<a href="/index.php/$1">$2</a>', $this->content, 1);
+            else {
+                $this->content = preg_replace('=\[\[(.*?) (.*?)\]\]=', '<a class="red-link" href="/index.php/'.PageUrlRule::urlForPageToBeCreated($chainPages).'">$2</a>', $this->content, 1);
+            }
+        }
+        parent::beforeSave();
+        return true;
+    }
+
     public function generateChildrenMenuItems()
     {
         $childrenID = $this->getChildrenIDs();

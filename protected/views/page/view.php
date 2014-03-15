@@ -23,9 +23,8 @@ $this->menu_child = $model->generateChildrenMenuItems();
 <?php $this->widget('zii.widgets.CDetailView', array(
 	'data'=>$model,
 	'attributes'=>array(
-		'id',
 		'title',
-		'content',
+        'content:html',
 		'url',
 	),
 )); ?>
