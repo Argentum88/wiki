@@ -48,24 +48,24 @@ class PageUrlRule extends CBaseUrlRule
                 if(self::checkCorrectnessOfPath($chainPages))
                     return 'page/create';
                 else
-                    throw new CHttpException(404,'No page');
+                    throw new CHttpException(404,'No page <a href="/index.php/'.self::urlForPageToBeCreated($chainPages).'">create new page</a>');
             case 'edit':
                 array_pop($chainPages);
                 if(self::checkCorrectnessOfPath($chainPages))
                     return 'page/update';
                 else
-                    throw new CHttpException(404,'No page');
+                    throw new CHttpException(404,'No page <a href="/index.php/'.self::urlForPageToBeCreated($chainPages).'">create new page</a>');
             case 'delete':
                 array_pop($chainPages);
                 if(self::checkCorrectnessOfPath($chainPages))
                     return 'page/delete';
                 else
-                    throw new CHttpException(404,'No page');
+                    throw new CHttpException(404,'No page <a href="/index.php/'.self::urlForPageToBeCreated($chainPages).'">create new page</a>');
             default:
                 if(self::checkCorrectnessOfPath($chainPages))
                     return 'page/view';
                 else
-                    throw new CHttpException(404,'No page');
+                    throw new CHttpException(404,'No page <a href="/index.php/'.self::urlForPageToBeCreated($chainPages).'">create new page</a>');
         }
     }
 
